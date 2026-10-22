@@ -183,6 +183,36 @@ dotfiles() {
     [[ $rc == 0 ]] && "${git[@]}" add ~/.bashrc    # refresh git's view of the rewritten file
     return $rc
 }
+alias ll='ls -lah' 
+alias la='ls -A'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias -- -='cd -'           # jump back to the previous directory
+mkcd() { mkdir -p "$1" && cd "$1"; }   # a function, not an alias
+
+alias rm='rm -I'            # asks once before deleting 3+ files or a folder
+alias cp='cp -i'            # asks before overwriting
+alias mv='mv -i'
+
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+
+alias gs='git status -sb'
+alias ga='git add'
+alias gc='git commit -m'
+alias gd='git diff'
+alias gl='git log --oneline --graph --decorate -15'
+# adds all, commits with message and pushes in one command, use: git yolo "my message"
+git config --global alias.yolo '!f() { [ "$1" = "-m" ] && shift; git add -A && git commit -m "$1" && git push; }; f'
+alias gy='git yolo'
+
+alias please='sudo $(fc -ln -1)'    # rerun the last command with sudo
+alias ports='ss -tulpn'             # what's listening
+alias c='clear'
+alias h='history | tail -30'
+
 alias cb="colcon build --symlink-install && source install/setup.bash"
 alias sb="source install/setup.bash"
 alias tl="ros2 topic list"
