@@ -2,7 +2,13 @@
 
 My shell and terminal setup: Bash with Oh My Bash (powerline prompt), Terminator, vim.
 
-The files are not symlinked. They sit in your home folder as usual (`~/.bashrc`, ...), and this repo just watches them. The repo's data lives in `~/dotfiles`.
+## What this does
+
+A bare git repo with your home folder as its work tree. Git's data lives in `~/dotfiles`, and the files stay where programs expect them (`~/.bashrc`, ...). There are no copies and no symlinks, and everything in `$HOME` is ignored except the tracked files.
+
+## Why not GNU Stow?
+
+Stow keeps the real files in the repo and symlinks them into your home folder, so you edit through links that tools can silently replace with plain files. Here the files in `~` are the real ones, and the only requirement is git. The trade-off is that a bare repo is less obvious than a folder of symlinks, and it relies on the ignore rule plus two custom pieces (the `dotfiles` function and the `.bashrc` filter).
 
 ## Set up a new machine (Debian/Ubuntu)
 
