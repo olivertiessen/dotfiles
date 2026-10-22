@@ -131,8 +131,8 @@ POWERLINE_PROMPT="user_info python_venv ruby cwd"
 
 source "$OSH"/oh-my-bash.sh
 
-# Failed-command status segment grey instead of red (must come after the theme loads)
-LAST_STATUS_THEME_PROMPT_COLOR=240
+# Hide the failed-command exit-status segment entirely (must come after the theme loads)
+function __powerline_last_status_prompt { :; }
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
