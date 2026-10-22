@@ -12,9 +12,18 @@ Stow keeps the real files in the repo and symlinks them into your home folder, s
 
 ## Set up a new machine (Debian/Ubuntu)
 
+First, make sure GitHub will accept pushes from this machine over SSH (HTTPS needs a credential helper that isn't set up by default, and causes `fatal: could not read Username` on push):
+
+```bash
+# 0. Generate a key (skip if you already have one) and add it at github.com/settings/keys
+ssh-keygen -t ed25519 -C "you@example.com"
+cat ~/.ssh/id_ed25519.pub
+ssh -T git@github.com    # should greet you by username once the key is added
+```
+
 ```bash
 # 1. Download the repo's data (no files are placed yet)
-git clone --bare https://github.com/olivertiessen/dotfiles.git ~/dotfiles
+git clone --bare git@github.com:olivertiessen/dotfiles.git ~/dotfiles
 
 # 2. A shortcut for git commands on this repo (the real one comes with .bashrc later)
 alias dotfiles='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
@@ -32,7 +41,12 @@ dotfiles config filter.localtail.clean "sed '/^# ---- LOCAL ONLY/q'"
 # 6. Put the files into your home folder (overwrites existing ones)
 dotfiles checkout -f
 
-# 7. Install terminator, Oh My Bash and the Nerd Font
+# 7. `git clone --bare` doesn't set up branch tracking the way a normal clone
+#    does, so the first `dotfiles push` would otherwise fail with
+#    "the current branch main has no upstream branch" — fix it now:
+dotfiles branch --set-upstream-to=origin/main main
+
+# 8. Install terminator, Oh My Bash and the Nerd Font
 ~/.config/dotfiles/setup.sh
 ```
 
