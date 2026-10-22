@@ -16,14 +16,17 @@ alias dotfiles='git --git-dir=$HOME/dotfiles --work-tree=$HOME'
 # 3. Don't list every file in your home folder as "untracked"
 dotfiles config status.showUntrackedFiles no
 
-# 4. Keep the LOCAL ONLY part of .bashrc out of commits (explained below)
+# 4. Ignore everything in your home folder, so `dotfiles add .` can't grab random files
+echo '/*' >> ~/dotfiles/info/exclude
+
+# 5. Keep the LOCAL ONLY part of .bashrc out of commits (explained below)
 echo '.bashrc filter=localtail' >> ~/dotfiles/info/attributes
 dotfiles config filter.localtail.clean "sed '/^# ---- LOCAL ONLY/q'"
 
-# 5. Put the files into your home folder (overwrites existing ones)
+# 6. Put the files into your home folder (overwrites existing ones)
 dotfiles checkout -f
 
-# 6. Install terminator, Oh My Bash and the Nerd Font
+# 7. Install terminator, Oh My Bash and the Nerd Font
 ~/.config/dotfiles/setup.sh
 ```
 
@@ -35,12 +38,14 @@ Edit the files where they are, then commit:
 
 ```bash
 dotfiles status                      # what changed?
-dotfiles add ~/.bashrc               # pick the file(s)
+dotfiles add -u                      # stage changes to files already tracked
 dotfiles commit -m "what I changed"
 dotfiles push
 ```
 
 On another machine, get the changes with `dotfiles pull`.
+
+To start tracking a new file: `dotfiles add -f ~/.config/something`. The `-f` is needed because everything in your home folder is ignored by default; that is what makes `dotfiles add .` safe.
 
 ## Settings for one machine only
 
