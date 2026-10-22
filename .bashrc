@@ -5,7 +5,7 @@ case $- in
 esac
 
 # Path to your oh-my-bash installation.
-export OSH='/home/oliver/.oh-my-bash'
+export OSH="$HOME/.oh-my-bash"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
@@ -126,7 +126,13 @@ plugins=(
 #
 #OMB_TERM_USE_TPUT=no
 
+# Powerline prompt: user + directory only, no git branch
+POWERLINE_PROMPT="user_info python_venv ruby cwd"
+
 source "$OSH"/oh-my-bash.sh
+
+# Failed-command status segment grey instead of red (must come after the theme loads)
+LAST_STATUS_THEME_PROMPT_COLOR=240
 
 # User configuration
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -157,14 +163,29 @@ source "$OSH"/oh-my-bash.sh
 # alias ohmybash="mate ~/.oh-my-bash"
 
 # aliases
-if [ -f ~/.aliases ]; then
-    source ~/.aliases
-fi
+alias ll='ls -la'
+# dotfiles: git for the bare repo in ~/dotfiles; `dotfiles pull` keeps the LOCAL ONLY part of ~/.bashrc
+dotfiles() {
+    local git=(git --git-dir="$HOME/dotfiles" --work-tree="$HOME")
+    local marker='^# ---- LOCAL ONLY'
+    if [[ $1 != pull ]]; then
+        "${git[@]}" "$@"
+        return
+    fi
+    local keep rc
+    keep=$(mktemp)
+    sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 > "$keep"
+    "${git[@]}" "$@"
+    rc=$?
+    sed -i "/$marker/q" ~/.bashrc
+    cat "$keep" >> ~/.bashrc
+    rm -f "$keep"
+    [[ $rc == 0 ]] && "${git[@]}" add ~/.bashrc    # refresh git's view of the rewritten file
+    return $rc
+}
+alias cb="colcon build --symlink-install && source install/setup.bash"
+alias sb="source install/setup.bash"
+alias tl="ros2 topic list"
+alias tele="ros2 run teleop_twist_keyboard teleop_twist_keyboard"
 
-# ros
-if [ -f ~/.rosrc ]; then
-    source ~/.rosrc
-fi
-
-# nvim
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+# ---- LOCAL ONLY: everything below this line stays on this machine (not committed) ----
