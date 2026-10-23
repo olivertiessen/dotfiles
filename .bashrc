@@ -169,12 +169,19 @@ dotfiles() {
     local git=(git --git-dir="$HOME/dotfiles" --work-tree="$HOME")
     local marker='^# ---- LOCAL ONLY'
     if [[ $1 == sync ]]; then    # dotfiles sync ["message"]: stage tracked files, commit, pull --rebase, push
+        local tail_bak=~/.bashrc.localtail.bak sync_rc
+        sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 > "$tail_bak"    # safety copy of the LOCAL ONLY part
         "${git[@]}" add -u || return
         if ! "${git[@]}" diff --cached --quiet; then
             "${git[@]}" commit -m "${2:-Update dotfiles}" || return
         fi
         dotfiles pull --rebase --autostash && "${git[@]}" push
-        return
+        sync_rc=$?
+        if [[ -s $tail_bak ]] && ! grep -qxFf <(head -n 3 "$tail_bak" | grep -v '^$') ~/.bashrc; then
+            sed -i "/$marker/q" ~/.bashrc; cat "$tail_bak" >> ~/.bashrc    # the sync lost it: put it back
+            echo "dotfiles: restored the LOCAL ONLY part of ~/.bashrc" >&2
+        fi
+        return $sync_rc
     fi
     if [[ $1 != pull ]]; then
         "${git[@]}" "$@"
