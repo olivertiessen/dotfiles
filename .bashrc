@@ -235,6 +235,9 @@ HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
+# zoxide: `z name` jumps to a frequently used directory, `zi` picks one with fzf (needs the PROMPT_COMMAND set above)
+command -v zoxide >/dev/null && eval "$(zoxide init bash)"
+
 # fzf: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd into directory
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 [ -f /usr/share/bash-completion/completions/fzf ] && source /usr/share/bash-completion/completions/fzf
