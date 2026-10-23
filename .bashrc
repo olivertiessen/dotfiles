@@ -232,8 +232,25 @@ PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 [ -f /usr/share/bash-completion/completions/fzf ] && source /usr/share/bash-completion/completions/fzf
 
-alias cb="colcon build --symlink-install && source install/setup.bash"
-alias sb="source install/setup.bash"
+# ROS 2 workspace helpers: find the workspace by walking up from the current directory
+_ws_up() {    # _ws_up <file-or-dir>: print the nearest parent directory containing it
+    local d=$PWD
+    while [[ $d != / ]]; do
+        [[ -e $d/$1 ]] && { echo "$d"; return; }
+        d=$(dirname "$d")
+    done
+    return 1
+}
+sb() {        # source the nearest install/setup.bash
+    local ws
+    ws=$(_ws_up install/setup.bash) || { echo "no install/setup.bash found above $PWD" >&2; return 1; }
+    source "$ws/install/setup.bash" && echo "sourced $ws/install/setup.bash"
+}
+cb() {        # build the nearest workspace (the one with src/), then source it; extra args go to colcon
+    local ws
+    ws=$(_ws_up src) || { echo "no workspace (src/) found above $PWD" >&2; return 1; }
+    (cd "$ws" && colcon build --symlink-install "$@") && source "$ws/install/setup.bash"
+}
 alias tl="ros2 topic list"
 alias tele="ros2 run teleop_twist_keyboard teleop_twist_keyboard"
 
