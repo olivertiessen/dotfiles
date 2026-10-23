@@ -77,3 +77,9 @@ To start tracking a new file: `dotfiles add -f ~/.config/something`, then `dotfi
 Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` overwrites the whole `.bashrc`.
 
 `dotfiles sync` also saves a copy of that section to `~/.bashrc.localtail.bak` (untracked) and restores it if a sync ever loses it.
+
+## What `setup.sh` installs
+
+- apt packages: `git`, `curl`, `terminator`, `vim`, `fzf`, `ripgrep` (`rg`)
+- [Oh My Bash](https://github.com/ohmybash/oh-my-bash), cloned to `~/.oh-my-bash`
+- JetBrainsMono Nerd Font, in `~/.local/share/fonts/JetBrainsMonoNF`
