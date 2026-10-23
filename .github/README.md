@@ -78,6 +78,8 @@ Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` o
 
 `dotfiles sync` also saves a copy of that section to `~/.bashrc.localtail.bak` (untracked) and restores it if a sync ever loses it.
 
+`setup.sh` also links `~/.config/dotfiles/CLAUDE.md` to `~/dotfiles/CLAUDE.md`, so Claude Code gets the repo's rules when started in `~/dotfiles`.
+
 ## What `setup.sh` installs
 
 - [git](https://git-scm.com) - Version control; the dotfiles repo itself uses it

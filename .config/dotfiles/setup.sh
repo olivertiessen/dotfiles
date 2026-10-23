@@ -20,4 +20,7 @@ if [ ! -d "$fonts" ]; then
 fi
 
 
+# Claude Code instructions for this repo, loaded when claude is started in ~/dotfiles
+ln -sfn ~/.config/dotfiles/CLAUDE.md ~/dotfiles/CLAUDE.md
+
 echo "Done. Restart your terminal."
