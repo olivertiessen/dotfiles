@@ -45,21 +45,30 @@ Then open a new terminal and set the font to "JetBrainsMono Nerd Font Mono" if T
 
 ## Changing things
 
-Edit the files where they are, then commit:
+Edit the files where they are, then publish with one command:
+
+```bash
+dotfiles sync "what I changed"
+```
+
+`sync` stages changes to files already tracked, commits them (skipped if nothing changed; with no message it uses "Update dotfiles"), runs `pull --rebase --autostash` so changes from another machine are replayed under yours, and pushes. It keeps the LOCAL ONLY part of `.bashrc` (see below).
+
+The same thing step by step:
 
 ```bash
 dotfiles status                      # what changed?
 dotfiles add -u                      # stage changes to files already tracked
 dotfiles commit -m "what I changed"
+dotfiles pull --rebase --autostash   # fetch and replay your commits on top
 dotfiles push
 ```
 
-On another machine, get the changes with `dotfiles pull`.
+On a machine where you only want the latest changes, use `dotfiles pull --rebase --autostash`. A plain `dotfiles pull` fails when both machines have new commits. Without `--autostash` it fails because `.bashrc` always looks modified (the LOCAL ONLY filter).
 
-To start tracking a new file: `dotfiles add -f ~/.config/something`. The `-f` is needed because everything in your home folder is ignored by default; that is what makes `dotfiles add .` safe.
+To start tracking a new file: `dotfiles add -f ~/.config/something`, then `dotfiles sync`. The `-f` is needed because everything in your home folder is ignored by default; that is what makes `dotfiles add .` safe.
 
 ## Settings for one machine only
 
-`~/.bashrc` ends with a line starting `# ---- LOCAL ONLY`. Put things that only belong to that machine below it (proxy, ROS, paths). When you commit, everything below that line is cut out, so it never reaches GitHub. `dotfiles pull` leaves that section alone.
+`~/.bashrc` ends with a line starting `# ---- LOCAL ONLY`. Put things that only belong to that machine below it (proxy, ROS, paths). When you commit, everything below that line is cut out, so it never reaches GitHub. `dotfiles pull` and `dotfiles sync` leave that section alone.
 
-Only `dotfiles pull` is safe for this. A plain `git pull` or `dotfiles checkout -f` overwrites the whole `.bashrc`.
+Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` overwrites the whole `.bashrc`.
