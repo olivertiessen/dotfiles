@@ -29,7 +29,10 @@ echo '/*' >> ~/dotfiles/info/exclude
 echo '.bashrc filter=localtail' >> ~/dotfiles/info/attributes
 dotfiles config filter.localtail.clean "sed '/^# ---- LOCAL ONLY/q'"
 
-# 6. Put the files into your home folder (overwrites existing ones)
+# 6. Put the files into your home folder (overwrites existing ones),
+#    so first save the current .bashrc: anything machine-specific in it
+#    (proxy, paths) can be copied below the LOCAL ONLY line afterwards
+[ -f ~/.bashrc ] && cp ~/.bashrc ~/.bashrc.pre-dotfiles.bak
 dotfiles checkout -f
 
 # 7. `git clone --bare` doesn't set up branch tracking the way a normal clone
@@ -72,3 +75,5 @@ To start tracking a new file: `dotfiles add -f ~/.config/something`, then `dotfi
 `~/.bashrc` ends with a line starting `# ---- LOCAL ONLY`. Put things that only belong to that machine below it (proxy, ROS, paths). When you commit, everything below that line is cut out, so it never reaches GitHub. `dotfiles pull` and `dotfiles sync` leave that section alone.
 
 Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` overwrites the whole `.bashrc`.
+
+`dotfiles sync` also keeps a safety copy of that section in `~/.bashrc.localtail.bak` (not tracked by git) each time it runs. If the section ever goes missing, `sync` puts it back from the copy and prints a message; you can also restore it by hand with `cat ~/.bashrc.localtail.bak >> ~/.bashrc` (after the marker line). The copy is overwritten on every sync, so it only protects against a sync losing the section, not against deleting it yourself.
