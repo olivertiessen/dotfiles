@@ -86,5 +86,6 @@ Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` o
 - [vim](https://www.vim.org) - Modal text editor, configured by `~/.vimrc`
 - [fzf](https://github.com/junegunn/fzf) - Fuzzy finder; Ctrl-R searches history, Ctrl-T files, Alt-C directories
 - [ripgrep](https://github.com/BurntSushi/ripgrep) - Fast recursive text search (`rg`) that respects `.gitignore`
+- [zoxide](https://github.com/ajeetdsouza/zoxide) - Smarter `cd` that learns your most used directories (`cd name` jumps, `cdi` picks with fzf); installed with its official script into `~/.local/bin`
 - [Oh My Bash](https://github.com/ohmybash/oh-my-bash) - Framework for Bash themes and plugins, cloned to `~/.oh-my-bash`
 - [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts) - Programming font with the icons the powerline prompt needs
