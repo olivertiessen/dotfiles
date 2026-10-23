@@ -168,6 +168,14 @@ alias ll='ls -la'
 dotfiles() {
     local git=(git --git-dir="$HOME/dotfiles" --work-tree="$HOME")
     local marker='^# ---- LOCAL ONLY'
+    if [[ $1 == sync ]]; then    # dotfiles sync ["message"]: stage tracked files, commit, pull --rebase, push
+        "${git[@]}" add -u || return
+        if ! "${git[@]}" diff --cached --quiet; then
+            "${git[@]}" commit -m "${2:-Update dotfiles}" || return
+        fi
+        dotfiles pull --rebase --autostash && "${git[@]}" push
+        return
+    fi
     if [[ $1 != pull ]]; then
         "${git[@]}" "$@"
         return
@@ -212,6 +220,17 @@ alias please='sudo $(fc -ln -1)'    # rerun the last command with sudo
 alias ports='ss -tulpn'             # what's listening
 alias c='clear'
 alias h='history | tail -30'
+
+# History: large, de-duplicated, shared live between terminals (must come after the theme loads)
+HISTSIZE=100000
+HISTFILESIZE=100000
+HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend
+PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
+
+# fzf: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd into directory
+[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+[ -f /usr/share/bash-completion/completions/fzf ] && source /usr/share/bash-completion/completions/fzf
 
 alias cb="colcon build --symlink-install && source install/setup.bash"
 alias sb="source install/setup.bash"
