@@ -80,6 +80,11 @@ Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` o
 
 ## What `setup.sh` installs
 
-- apt packages: `git`, `curl`, `terminator`, `vim`, `fzf`, `ripgrep` (`rg`)
-- [Oh My Bash](https://github.com/ohmybash/oh-my-bash), cloned to `~/.oh-my-bash`
-- JetBrainsMono Nerd Font, in `~/.local/share/fonts/JetBrainsMonoNF`
+- [git](https://git-scm.com) - Version control; the dotfiles repo itself uses it
+- [curl](https://curl.se) - Command-line tool for downloading files over HTTP
+- [Terminator](https://gnome-terminator.org) - Terminal emulator with split panes and tabs
+- [vim](https://www.vim.org) - Modal text editor, configured by `~/.vimrc`
+- [fzf](https://github.com/junegunn/fzf) - Fuzzy finder; Ctrl-R searches history, Ctrl-T files, Alt-C directories
+- [ripgrep](https://github.com/BurntSushi/ripgrep) - Fast recursive text search (`rg`) that respects `.gitignore`
+- [Oh My Bash](https://github.com/ohmybash/oh-my-bash) - Framework for Bash themes and plugins, cloned to `~/.oh-my-bash`
+- [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts) - Programming font with the icons the powerline prompt needs
