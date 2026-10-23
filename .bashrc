@@ -228,9 +228,6 @@ HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
 
-# Debian/Ubuntu ship bat as "batcat" (the name "bat" was taken)
-command -v bat >/dev/null || ! command -v batcat >/dev/null || alias bat=batcat
-
 # fzf: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd into directory
 [ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
 [ -f /usr/share/bash-completion/completions/fzf ] && source /usr/share/bash-completion/completions/fzf

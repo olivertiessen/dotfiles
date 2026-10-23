@@ -3,7 +3,7 @@
 set -euo pipefail
 
 sudo apt update
-sudo apt install -y git curl terminator vim fzf bat
+sudo apt install -y git curl terminator vim fzf
 
 # Oh My Bash (cloned directly so it doesn't overwrite ~/.bashrc)
 [ -d ~/.oh-my-bash ] || git clone --depth 1 https://github.com/ohmybash/oh-my-bash ~/.oh-my-bash
