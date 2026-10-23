@@ -76,4 +76,4 @@ To start tracking a new file: `dotfiles add -f ~/.config/something`, then `dotfi
 
 Only those two are safe for this. A plain `git pull` or `dotfiles checkout -f` overwrites the whole `.bashrc`.
 
-`dotfiles sync` also keeps a safety copy of that section in `~/.bashrc.localtail.bak` (not tracked by git) each time it runs. If the section ever goes missing, `sync` puts it back from the copy and prints a message; you can also restore it by hand with `cat ~/.bashrc.localtail.bak >> ~/.bashrc` (after the marker line). The copy is overwritten on every sync, so it only protects against a sync losing the section, not against deleting it yourself.
+`dotfiles sync` also saves a copy of that section to `~/.bashrc.localtail.bak` (untracked) and restores it if a sync ever loses it.
