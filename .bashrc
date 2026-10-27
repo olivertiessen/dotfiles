@@ -172,12 +172,12 @@ dotfiles() {
     local marker='^# ---- LOCAL ONLY'
     if [[ $1 == sync ]]; then    # dotfiles sync ["message"]: stage tracked files, commit, pull --rebase, push
         local tail_bak=~/.bashrc.localtail.bak sync_rc
-        sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 > "$tail_bak"    # safety copy of the LOCAL ONLY part
+        sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 >| "$tail_bak"    # safety copy of the LOCAL ONLY part (>| : noclobber may be on)
         "${git[@]}" add -u || return
         if ! "${git[@]}" diff --cached --quiet; then
             "${git[@]}" commit -m "${2:-Update dotfiles}" || return
         fi
-        dotfiles pull --rebase --autostash && "${git[@]}" push
+        dotfiles pull && "${git[@]}" push
         sync_rc=$?
         if [[ -s $tail_bak ]] && ! grep -qxFf <(head -n 3 "$tail_bak" | grep -v '^$') ~/.bashrc; then
             sed -i "/$marker/q" ~/.bashrc; cat "$tail_bak" >> ~/.bashrc    # the sync lost it: put it back
@@ -191,8 +191,8 @@ dotfiles() {
     fi
     local keep rc
     keep=$(mktemp)
-    sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 > "$keep"
-    "${git[@]}" "$@"
+    sed -n "/$marker/,\$p" ~/.bashrc | tail -n +2 >| "$keep"    # >| : mktemp already created $keep, noclobber may be on
+    "${git[@]}" pull --rebase --autostash "${@:2}"
     rc=$?
     sed -i "/$marker/q" ~/.bashrc
     cat "$keep" >> ~/.bashrc

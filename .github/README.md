@@ -54,7 +54,7 @@ Edit the files where they are, then publish with one command:
 dotfiles sync "what I changed"
 ```
 
-`sync` stages changes to files already tracked, commits them (skipped if nothing changed; with no message it uses "Update dotfiles"), runs `pull --rebase --autostash` so changes from another machine are replayed under yours, and pushes. It keeps the LOCAL ONLY part of `.bashrc` (see below).
+`sync` stages changes to files already tracked, commits them (skipped if nothing changed; with no message it uses "Update dotfiles"), pulls so changes from another machine are replayed under yours, and pushes. It keeps the LOCAL ONLY part of `.bashrc` (see below).
 
 The same thing step by step:
 
@@ -62,11 +62,11 @@ The same thing step by step:
 dotfiles status                      # what changed?
 dotfiles add -u                      # stage changes to files already tracked
 dotfiles commit -m "what I changed"
-dotfiles pull --rebase --autostash   # fetch and replay your commits on top
+dotfiles pull                        # fetch and replay your commits on top
 dotfiles push
 ```
 
-On a machine where you only want the latest changes, use `dotfiles pull --rebase --autostash`. A plain `dotfiles pull` fails when both machines have new commits. Without `--autostash` it fails because `.bashrc` always looks modified (the LOCAL ONLY filter).
+On a machine where you only want the latest changes, `dotfiles pull` is enough. It always runs `git pull --rebase --autostash` under the hood — plain `git pull` would fail because `.bashrc` always looks locally modified (the LOCAL ONLY filter), and `--autostash` works around that.
 
 To start tracking a new file: `dotfiles add -f ~/.config/something`, then `dotfiles sync`. The `-f` is needed because everything in your home folder is ignored by default; that is what makes `dotfiles add .` safe.
 
