@@ -218,11 +218,12 @@ alias free='free -h'
 
 alias gs='git status -sb'
 alias ga='git add'
-alias gc='git commit -m'
+unalias gc 2>/dev/null     # Oh My Bash defines an alias gc; an alias would shadow this function
+gc() { if (( $# )); then git commit -m "$@"; else git commit; fi; }    # gc "msg" commits with that message, bare gc opens the editor
 alias gd='git diff'
 alias gl='git log --oneline --graph --decorate -15'
-# adds all, commits with message and pushes in one command, use: git yolo "my message"
-git config --global alias.yolo '!f() { [ "$1" = "-m" ] && shift; git add -A && git commit -m "$1" && git push; }; f'
+# adds all, commits and pushes in one command: git yolo "my message", or just git yolo to write the message in the editor
+git config --global alias.yolo '!f() { [ "$1" = "-m" ] && shift; git add -A && { if [ -n "$1" ]; then git commit -m "$1"; else git commit; fi; } && git push; }; f'
 alias gy='git yolo'
 
 alias please='sudo $(fc -ln -1)'    # rerun the last command with sudo
@@ -236,6 +237,9 @@ HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 PROMPT_COMMAND="history -a; ${PROMPT_COMMAND}"
+
+# Use vim as default editor
+export EDITOR=vim
 
 # zoxide: replaces cd. `cd name` jumps to a frequently used directory (real paths still win), `cdi` picks one with fzf
 command -v zoxide >/dev/null && eval "$(zoxide init bash --cmd cd)"
