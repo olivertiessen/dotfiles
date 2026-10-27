@@ -126,8 +126,10 @@ plugins=(
 #
 #OMB_TERM_USE_TPUT=no
 
-# Powerline prompt: user + directory only, no git branch
-POWERLINE_PROMPT="user_info python_venv ruby cwd"
+# Powerline prompt: user, python venv, directory, and git branch
+POWERLINE_LEFT_PROMPT="cwd"
+POWERLINE_RIGHT_PROMPT="python_venv user_info"
+POWERLINE_PROMPT="$POWERLINE_LEFT_PROMPT"
 
 source "$OSH"/oh-my-bash.sh
 
