@@ -124,10 +124,10 @@ plugins=(
 # This disables the use of the "tput" command, and the escape sequences are
 # initialized to be the ANSI version:
 #
-#OMB_TERM_USE_TPUT=no
+OMB_TERM_USE_TPUT=no
 
 # Powerline prompt: everything on the left, nothing on the right
-POWERLINE_LEFT_PROMPT="user_info python_venv cwd scm"
+POWERLINE_LEFT_PROMPT="user_info python_venv cwd"
 POWERLINE_PROMPT="$POWERLINE_LEFT_PROMPT"
 
 source "$OSH"/oh-my-bash.sh
