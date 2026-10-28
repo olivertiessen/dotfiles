@@ -126,12 +126,14 @@ plugins=(
 #
 #OMB_TERM_USE_TPUT=no
 
-# Powerline prompt: user, python venv, directory, and git branch
-POWERLINE_LEFT_PROMPT="cwd"
-POWERLINE_RIGHT_PROMPT="python_venv user_info"
+# Powerline prompt: everything on the left, nothing on the right
+POWERLINE_LEFT_PROMPT="user_info python_venv cwd scm"
 POWERLINE_PROMPT="$POWERLINE_LEFT_PROMPT"
 
 source "$OSH"/oh-my-bash.sh
+
+# Must be cleared AFTER oh-my-bash.sh loads (the theme uses := which overrides empty strings)
+POWERLINE_RIGHT_PROMPT=""
 
 # Hide the failed-command exit-status segment entirely (must come after the theme loads)
 function __powerline_last_status_prompt { :; }
@@ -271,6 +273,7 @@ cb() {        # build the nearest workspace (the one with src/), then source it;
     (cd "$ws" && colcon build --symlink-install "$@") && source "$ws/install/setup.bash"
 }
 alias tl="ros2 topic list"
+alias te="ros2 topic echo"
 alias tele="ros2 run teleop_twist_keyboard teleop_twist_keyboard"
 
 # ---- LOCAL ONLY: everything below this line stays on this machine (not committed) ----
