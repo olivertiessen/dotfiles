@@ -35,9 +35,12 @@ dotfiles config filter.localtail.clean "sed '/^# ---- LOCAL ONLY/q'"
 [ -f ~/.bashrc ] && cp ~/.bashrc ~/.bashrc.pre-dotfiles.bak
 dotfiles checkout -f
 
-# 7. `git clone --bare` doesn't set up branch tracking the way a normal clone
-#    does, so the first `dotfiles push` would otherwise fail with
+# 7. `git clone --bare` doesn't create the `origin/*` remote-tracking branches
+#    or set up branch tracking the way a normal clone does, so the first
+#    `dotfiles push` would otherwise fail with
 #    "the current branch main has no upstream branch" — fix it now:
+dotfiles config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+dotfiles fetch origin
 dotfiles branch --set-upstream-to=origin/main main
 
 # 8. Install terminator, Oh My Bash and the Nerd Font
